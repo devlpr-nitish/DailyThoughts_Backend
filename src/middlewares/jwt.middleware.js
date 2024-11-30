@@ -1,18 +1,18 @@
 import jwt from 'jsonwebtoken';
 
 const authenticate = (req, res, next) => {
-    const token = req.header('Authorization')?.split(' ')[1]; // Token is passed in Authorization header as "Bearer <token>"
+    const token = req.header('Authorization') // Token is passed in Authorization header as "Bearer <token>"
     if (!token) {
         return res.status(401).json({
             success: false,
-            message: "Access denied, no token provided"
+            message: "Access denied, unauthorized user"
         });
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded; // Attach user data to the request object
-        next(); // Proceed to the next middleware or route handler
+        // console.log(decoded);
+        req.userId = decoded.userId; // Attach user data to the request object
     } catch (error) {
         return res.status(400).json({
             success: false,
