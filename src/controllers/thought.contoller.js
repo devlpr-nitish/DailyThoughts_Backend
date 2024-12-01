@@ -14,7 +14,7 @@ export default class ThoughtContoller {
       if (!thought) {
         return res
           .status(400)
-          .json({ success: false, error: "Message is required." });
+          .json({ success: false, error: "Thought can't be empty!!!" });
       }
 
       const userData = await userModel.findOne({ _id: userId });
