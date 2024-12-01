@@ -11,17 +11,17 @@ const ThoughtSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    college:{
-        type:String,
+    college: {
+        type: String,
         required: true,
     },
     createdAt: {
         type: Date,
-        default: Date.now,
-        expires: 86400
+        default: Date.now
     }
 });
 
+// Create a TTL index for the `createdAt` field to expire after 86400 seconds (24 hours)
+ThoughtSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });
+
 export const Thought = mongoose.model('Thought', ThoughtSchema);
-
-
