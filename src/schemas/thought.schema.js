@@ -22,6 +22,6 @@ const ThoughtSchema = new mongoose.Schema({
 });
 
 // Create a TTL index for the `createdAt` field to expire after 86400 seconds (24 hours)
-// ThoughtSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });
+ThoughtSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });
 
 export const Thought = mongoose.model('Thought', ThoughtSchema);
