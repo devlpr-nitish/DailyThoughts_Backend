@@ -61,7 +61,7 @@ export default class UserController {
         message: "Login successful",
       });
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       return res.status(500).json({
         success: false,
         message: "An error occurred while processing your request",

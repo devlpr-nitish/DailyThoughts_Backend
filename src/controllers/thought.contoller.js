@@ -29,7 +29,7 @@ export default class ThoughtContoller {
 
       return res.status(201).json({ success: true, data: newThought });
     } catch (error) {
-      console.error("Error saving thought:", error);
+      // console.error("Error saving thought:", error);
 
       // Ensure a single response is sent
       if (!res.headersSent) {
@@ -61,7 +61,7 @@ export default class ThoughtContoller {
       // Return the thoughts along with the user data
       return res.status(200).json({ success: true, thoughts });
     } catch (error) {
-      console.error("Error fetching thoughts:", error);
+      // console.error("Error fetching thoughts:", error);
       return res.status(500).json({ error: "Internal Server Error" });
     }
   }
@@ -98,7 +98,7 @@ export default class ThoughtContoller {
         .status(200)
         .json({ success: true, message: "Thought deleted successfully" });
     } catch (error) {
-      console.error("Error deleting thought:", error);
+      // console.error("Error deleting thought:", error);
       res
         .status(500)
         .json({ message: "An error occurred while deleting the thought" });
@@ -139,7 +139,7 @@ export default class ThoughtContoller {
   
       res.status(200).json({ success: true, thoughts });
     } catch (error) {
-      console.error("Error fetching thoughts by college name:", error);
+      // console.error("Error fetching thoughts by college name:", error);
       res.status(500).json({ message: "An error occurred while fetching thoughts." });
     }
   }
