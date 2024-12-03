@@ -33,7 +33,7 @@ export default class ThoughtContoller {
 
       // Ensure a single response is sent
       if (!res.headersSent) {
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(500).json({ error: "Internal Server Error" , error});
       }
     }
   }
