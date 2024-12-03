@@ -4,7 +4,8 @@ const ThoughtSchema = new mongoose.Schema({
     thought: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        minlength: [50, 'thought can not be greater than 50 length']
     },
     user: {
         type: mongoose.Schema.Types.ObjectId, // Reference to the User model
