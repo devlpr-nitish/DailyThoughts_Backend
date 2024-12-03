@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const restrictedWords = ['madarchod', 'behenchod', 'bur', 'sneha', 'snehaa', 'snehaaa', 'chut', 'ssneha','SNEHA', 'Sneha'];
+const restrictedWords = ['madarchod','madharchod', 'behenchod', 'bur', 'sneha', 'snehaa', 'snehaaa', 'chut', 'ssneha','SNEHA', 'Sneha'];
 
 const ThoughtSchema = new mongoose.Schema({
   thought: {
