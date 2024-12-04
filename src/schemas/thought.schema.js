@@ -28,6 +28,13 @@ const ThoughtSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  username: {
+    type: String,
+    required: true,  
+    lowercase: true, 
+    match: [/^[a-z0-9]+$/, 'Username must only contain lowercase letters and numbers'], 
+    trim: true,
+},
   createdAt: {
     type: Date,
     default: Date.now,

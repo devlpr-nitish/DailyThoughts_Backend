@@ -23,6 +23,7 @@ export default class ThoughtContoller {
         thought,
         user: userId,
         college: userData.college,
+        username: userData.username
       });
 
       await newThought.save();
