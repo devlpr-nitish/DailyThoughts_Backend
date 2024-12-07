@@ -1,6 +1,18 @@
 import mongoose from "mongoose";
 
-const restrictedWords = ['madarchod','madharchod', 'behenchod', 'bur', 'sneha', 'snehaa', 'snehaaa', 'chut', 'ssneha','SNEHA', 'Sneha'];
+const restrictedWords = [
+  "madarchod",
+  "madharchod",
+  "behenchod",
+  "bur",
+  "sneha",
+  "snehaa",
+  "snehaaa",
+  "chut",
+  "ssneha",
+  "SNEHA",
+  "Sneha",
+];
 
 const ThoughtSchema = new mongoose.Schema({
   thought: {
@@ -15,8 +27,7 @@ const ThoughtSchema = new mongoose.Schema({
           value.toLowerCase().includes(word)
         );
       },
-      message: (props) =>
-        `Your thought contains restricted words`,
+      message: (props) => `Your thought contains restricted words`,
     },
   },
   user: {
@@ -30,11 +41,26 @@ const ThoughtSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    required: true,  
-    lowercase: true, 
-    match: [/^[a-z0-9]+$/, 'Username must only contain lowercase letters and numbers'], 
+    required: true,
+    lowercase: true,
+    match: [
+      /^[a-z0-9]+$/,
+      "Username must only contain lowercase letters and numbers",
+    ],
     trim: true,
-},
+  },
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }
+  ],
+  dislikes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }
+  ],
   createdAt: {
     type: Date,
     default: Date.now,

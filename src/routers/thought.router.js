@@ -16,6 +16,12 @@ thoughtRouter.delete("/:thoughtId", (req,res,next)=>{
 thoughtRouter.get("/:collegeName", (req,res,next)=>{
     thoughtController.getThoughtsByCollegeName(req,res,next);
 })
+thoughtRouter.post("/:thoughtId/like", (req,res,next)=>{
+    thoughtController.likeThought(req,res,next);
+})
+thoughtRouter.post("/:thoughtId/dislike", (req,res,next)=>{
+    thoughtController.dislikeThought(req,res,next);
+})
 
 
 

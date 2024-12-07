@@ -23,7 +23,7 @@ export default class ThoughtContoller {
         thought,
         user: userId,
         college: userData.college,
-        username: userData.username
+        username: userData.username,
       });
 
       await newThought.save();
@@ -34,7 +34,7 @@ export default class ThoughtContoller {
 
       // Ensure a single response is sent
       if (!res.headersSent) {
-        return res.status(500).json({ error: "Internal Server Error" , error});
+        return res.status(500).json({ error: "Internal Server Error", error });
       }
     }
   }
@@ -84,12 +84,10 @@ export default class ThoughtContoller {
 
       if (thought.user.toString() !== userId) {
         // Assuming `user` is a field in the Thought model
-        return res
-          .status(403)
-          .json({
-            success: false,
-            message: "You are not authorized to delete this thought",
-          });
+        return res.status(403).json({
+          success: false,
+          message: "You are not authorized to delete this thought",
+        });
       }
 
       // Delete the thought
@@ -106,23 +104,27 @@ export default class ThoughtContoller {
     }
   }
 
-  async getThoughtsByCollegeName(req,res,next){
+  async getThoughtsByCollegeName(req, res, next) {
     try {
       const { collegeName } = req.params; // Extract collegeName from params
       const userId = req.userId; // Extract userId from the request (assumes middleware has set this)
-  
+
       if (!collegeName || !userId) {
-        return res.status(400).json({ message: "College name and user ID are required." });
+        return res
+          .status(400)
+          .json({ message: "College name and user ID are required." });
       }
-  
+
       // Find the user making the request
       const user = await userModel.findById(userId);
-  
+
       if (!user) {
         return res.status(404).json({ message: "User not found." });
       }
-      const formateCollegeName = user.college.toLowerCase().replace(/\s+/g, '-');
-  
+      const formateCollegeName = user.college
+        .toLowerCase()
+        .replace(/\s+/g, "-");
+
       // Check if the user's college matches the collegeName from params
       if (formateCollegeName !== collegeName) {
         return res.status(403).json({
@@ -130,18 +132,110 @@ export default class ThoughtContoller {
           message: "You are not authorized to view thoughts for this college.",
         });
       }
-  
+
       // Fetch thoughts that match the college name
       const thoughts = await Thought.find({ college: user.college });
-  
+
       if (!thoughts || thoughts.length === 0) {
-        return res.status(404).json({ message: "No thoughts found for this college." });
+        return res
+          .status(404)
+          .json({ message: "No thoughts found for this college." });
       }
-  
+
       res.status(200).json({ success: true, thoughts });
     } catch (error) {
       // console.error("Error fetching thoughts by college name:", error);
-      res.status(500).json({ message: "An error occurred while fetching thoughts." });
+      res
+        .status(500)
+        .json({
+          success: false,
+          message: "An error occurred while fetching thoughts.",
+        });
     }
   }
+  async likeThought(req, res, next) {
+    try {
+      const userId = req.userId;
+      if (!userId) {
+        return res.status(401).json({ success: false, error: "Unauthorized user." });
+      }
+  
+      const thoughtId = req.params.thoughtId;
+      if (!thoughtId) {
+        return res.status(400).json({ success: false, error: "Something went wrong..." });
+      }
+  
+      const updateResult = await Thought.updateOne(
+        { _id: thoughtId },
+        { 
+          $pull: { dislikes: userId }, // Remove from dislikes if present
+          $addToSet: { likes: userId } // Add to likes if not already present
+        }
+      );
+  
+      if (updateResult.matchedCount === 0) {
+        return res.status(404).json({ success: false, error: "Thought not found." });
+      }
+
+      const updatedThought = await Thought.findById(thoughtId);
+  
+      return res.status(200).json({
+        success: true,
+        message: "Thought liked successfully.",
+        updatedThought
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while liking the thought.",
+        error,
+      });
+    }
+  }
+  
+
+  async dislikeThought(req, res, next) {
+    try {
+      const userId = req.userId;
+      if (!userId) {
+        return res.status(401).json({ success: false, error: "Unauthorized user." });
+      }
+  
+      const thoughtId = req.params.thoughtId;
+      if (!thoughtId) {
+        return res.status(400).json({ success: false, error: "Thought ID is required." });
+      }
+  
+      const updateResult = await Thought.updateOne(
+        { _id: thoughtId },
+        { 
+          $pull: { likes: userId }, // Remove from likes if present
+          $addToSet: { dislikes: userId } // Add to dislikes if not already present
+        }
+      );
+  
+      if (updateResult.matchedCount === 0) {
+        return res.status(404).json({ success: false, error: "Thought not found." });
+      }
+
+      const updatedThought = await Thought.findById(thoughtId);
+  
+      return res.status(200).json({
+        success: true,
+        message: "Thought disliked successfully.",
+        updatedThought
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while disliking the thought.",
+        error,
+      });
+    }
+  }
+  
+
+
 }
